@@ -1,0 +1,183 @@
+body {
+  font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;      
+  align-items: center;        
+  justify-content: flex-start; 
+  min-height: 100vh;
+  margin: 0;
+  padding-top: 40px;       
+  background: #fbfcfe;
+}
+
+.container {
+  background: #ffffff;
+  padding: 36px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(12,20,30,0.06);
+  width: min(1200px, 96%);
+  max-width: 1200px;
+  text-align: center;
+  margin-top: 16px; 
+}
+
+.site-title {
+  font-size: clamp(36px, 8vw, 100px);
+  margin: 24px 0;
+  text-align: center;
+}
+
+header,
+.container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Site logo */
+.logo {
+  width: clamp(140px, 40vw, 300px);
+  height: clamp(140px, 40vw, 300px);
+  margin: 0 auto 12px auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(12,20,30,0.08);
+  position: relative;
+}
+
+/* left and right images fill their grid columns; divider is auto-sized */
+.logo > img:not(.logo-divider) {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+}
+
+.logo-left {
+    grid-column: 1; 
+    transform-origin: center;
+}
+
+.logo-right { 
+    grid-column: 2; 
+    transform-origin: center;
+}
+
+/* place divider absolutely so it overlaps the seam */
+.logo-divider {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  z-index: 4;
+  border-radius: 75%;
+  background: rgba(255,255,255,0.8);
+  padding: 6px;
+  box-shadow: 0 6px 18px rgba(12,20,30,0.12);
+  pointer-events: none;
+}
+
+/* Title of website */
+header { display:flex; flex-direction:column; align-items:center; }
+
+.subtitle {
+  margin: 0;
+  color: #6b7280;
+  text-align: center;
+  font-size: 24px;
+}
+
+/* For image input */ 
+.dropzone {
+  border: 2px dashed #d9dde6;
+  border-radius: 12px;
+  padding: 22px;
+  background: #fcfdff;
+  cursor: pointer;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.file-input {
+    display: none; 
+}
+
+.preview-img {
+  max-width: 100%;
+  max-height: 240px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+/* Adapt website to mobile devices */
+@media (max-width: 900px) {
+  body { padding-top: 24px; }
+  .container { padding: 28px; }
+  .preview-img { max-height: 200px; }
+}
+
+@media (max-width: 600px) {
+  .site-title { font-size: clamp(28px, 10vw, 56px); }
+  .container { padding: 20px; }
+  .logo { width: clamp(120px, 48vw, 220px); height: clamp(120px, 48vw, 220px); }
+  .preview-img { max-height: 160px; }
+  .dropzone { padding: 16px; min-height: 120px; touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.05); }
+  .dropzone #dropText { font-size: 16px; }
+  .controls { flex-direction: column; gap: 12px; }
+  .num-input { width: 100%; max-width: 120px; }
+  .submit-button { width: 100%; }
+  .subtitle { font-size: 16px; }
+  .preview-img { width: 100%; height: auto; max-height: 180px; }
+}
+
+.dropzone:focus {
+  outline: 3px solid rgba(29,185,84,0.18);
+  outline-offset: 4px;
+}
+
+.file-label {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #1db954;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.num-input {
+  width: 40px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #e6e9ef;
+}
+
+.controls {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 0;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+}
+
+.hint {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #6b7280;
+}
