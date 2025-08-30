@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 import os 
 import sys
 import json 
@@ -16,8 +16,8 @@ from search import convert_img_to_embedding, find_k_similar
 
 # Load index and json (should be existing already)
 with open(METADATA_FILE, "r") as f: 
-    metadata = json.load 
-metadata_hash = {album["faiss_index"]: album for album in metadata}
+    metadata = json.load(f)
+metadata_hash = {album["faiss_index"]:album for album in metadata}
 index = faiss.read_index(INDEX_FILE)
 
 app = Flask(__name__)
