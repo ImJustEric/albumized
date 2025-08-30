@@ -1,0 +1,11 @@
+# Most items include the caches and the metadata for the album database 
+__pycache__/
+*.so
+.env
+.spotipyoauthcache
+faiss.index
+albums/
+metadata.json
+.DS_Store
+.env
+.cache
