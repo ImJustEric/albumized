@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Albumized</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <header>
+        <div class="logo" id="siteLogo" aria-hidden="true">
+            <img class="logo-left" src="" alt="" />
+            <img class="logo-divider" src="{{ url_for('static', filename='images/question-mark-circle-icon.svg') }}" alt="?" />
+            <img class="logo-right" src="" alt="" />
+        </div>
+        <h1 class="site-title">Albumized</h1>
+        <p class="subtitle">Does this picture look like it could've been in an album? Input an image and find out!</p>
+    </header>
+    <main class="container">
+
+        <form id="searchForm" method="post" action="/results" enctype="multipart/form-data">
+    <label class="dropzone" id="dropZone" role="button" tabindex="0" aria-label="Upload image">
+            <div id="dropText">Click to choose an image or drag &amp; drop</div>
+            <img id="previewImg" class="preview-img" alt="preview" style="display:none" />
+            <div class="hint" id="fileName">No file chosen</div>
+        </label>
+        <input id="imageInput" name="image" class="file-input" type="file" accept="image/*" />
+
+        <div class="controls">
+            <label>
+            Number of albums to show:
+            <input type="number" name="num_results" class="num-input" min="1" max="10" value="1" />
+            </label>
+            <button type="submit" class="submit-button">Search</button>
+        </div>
+        </form>
+    </main>
+    </body>
+</html>
