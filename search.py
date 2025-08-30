@@ -7,13 +7,27 @@ from PIL import Image
 """Input an query image and output an album whose cover is most similar to the image,
 along with its metadata (artist, album name, etc)."""
 
-def convert_img_to_embedding(img:Image): 
-    """Take and image and run it through the pretrained model to product its embeddings"""
-    if not os.path.exists(img):
-        print(f"Image does not exist at this path: {img}")
-        return 
-    model = AlbumEmbeddingExtractor() 
-    emb = model.embed_image(img)
+def convert_img_to_embedding(img): 
+    """Take an image (PIL.Image) or a filesystem path and run it through the pretrained model
+    to produce its embeddings. Returns a 2-D numpy array suitable for FAISS search.
+    """
+    model = AlbumEmbeddingExtractor()
+
+    # If a path was provided, open it. If a PIL Image was provided, use it directly.
+    pil_img = None
+    if isinstance(img, str):
+        if not os.path.exists(img):
+            print(f"Image does not exist at this path: {img}")
+            return None
+        try:
+            pil_img = Image.open(img)
+        except Exception as e:
+            print(f"Failed to open image at path {img}: {e}")
+            return None
+    else:
+        pil_img = img
+
+    emb = model.embed_image(pil_img)
     emb = np.expand_dims(emb, axis=0) # Turn into 2-D vector 
     return emb 
 

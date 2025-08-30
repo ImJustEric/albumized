@@ -29,8 +29,8 @@ def index():
 
 @app.route("/results", methods=["POST"])
 def results():
-    file = request.files.get("file")
-    num_results = request.form.get("num")
+    file = request.files.get("image")
+    num_results = request.form.get("num_results")
     if not file:
         return render_template("index.html", error_message="Please input a valid image")
     try:
@@ -39,5 +39,4 @@ def results():
         return render_template("index.html", error_message=f"Image cannot be converted: {e}")
     emb = convert_img_to_embedding(img)
     final_list = find_k_similar(emb, index, metadata_hash, num_results)
-    return render_template("results.html", results=final_list)
-    
+    return render_template("results.html", img=img, results=final_list, num_results=num_results)
