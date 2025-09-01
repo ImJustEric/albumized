@@ -1,0 +1,9 @@
+Flask>=2.2,<3.0
+numpy>=1.23
+Pillow>=9.0
+python-dotenv>=1.0.0
+# FAISS is platform-specific, look at user manuals based on Mac/Windows
+faiss-cpu>=1.7.4
+torch>=2.2.0
+torchvision>=0.15.2
+gunicorn>=20.1.0
