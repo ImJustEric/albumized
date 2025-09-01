@@ -183,15 +183,14 @@ header { display:flex; flex-direction:column; align-items:center; }
     color: #6b7280;
 }
 
-/* Results: grid and card styling */
+/* Results page */
 .results-grid {
   display: grid;
-  /* narrower, fixed-ish card width and center the grid */
   grid-template-columns: repeat(auto-fit, minmax(420px, 720px));
   gap: 18px;
   margin-top: 22px;
   align-items: start;
-  justify-content: center; /* center cards when there's extra horizontal space */
+  justify-content: center;
 }
 
 .result-card {
@@ -237,6 +236,27 @@ header { display:flex; flex-direction:column; align-items:center; }
   box-shadow: 0 12px 36px rgba(12,20,30,0.12);
   border: 1px solid rgba(12,20,30,0.05);
 }
+
+/* Rank badge shown on the right edge of the card */
+.rank-badge {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(180deg, #0b1220, #073047);
+  color: #fff;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 8px 26px rgba(9,18,28,0.18);
+  font-size: 18px;
+  line-height: 1;
+}
+
+@media (max-width: 900px) {
+  .rank-badge { right: 12px; font-size: 16px; padding: 8px 12px; }
+}
+
 
 .meta {
   display: flex;

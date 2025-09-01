@@ -47,6 +47,9 @@
                 {% endif %}
               </div>
             </div>
+
+            {# Rank badge on the right showing 1-based position #}
+            <div class="rank-badge" role="status" aria-label="Result number {{ loop.index }}">#{{ loop.index }}</div>
           </div>
         {% else %}
           <div class="no-result">No results found.</div>
