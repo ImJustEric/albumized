@@ -1,6 +1,6 @@
 body {
   font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
-  font-size: 16px; /* slightly larger base font for readability */
+  font-size: 16px; 
   display: flex;
   flex-direction: column;      
   align-items: center;        
@@ -64,7 +64,6 @@ header,
     transform-origin: center;
 }
 
-/* place divider absolutely so it overlaps the seam */
 .logo-divider {
   position: absolute;
   left: 50%;
@@ -237,7 +236,7 @@ header { display:flex; flex-direction:column; align-items:center; }
   border: 1px solid rgba(12,20,30,0.05);
 }
 
-/* Rank badge shown on the right edge of the card */
+/* Ranks for each result */
 .rank-badge {
   position: absolute;
   right: 14px;
@@ -264,11 +263,11 @@ header { display:flex; flex-direction:column; align-items:center; }
   align-items: flex-start;
   gap: 10px;
   flex: 1 1 auto;
-  padding-left: 8px; /* create breathing room from accent bar */
+  padding-left: 8px;
 }
 
 .meta .title {
-  font-size: 22px; /* larger, prominent title */
+  font-size: 22px;
   font-weight: 800;
   color: #07101a;
   line-height: 1.12;

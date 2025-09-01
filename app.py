@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, flash, redirect, url_for, send_file, abort
+from flask import Flask, request, render_template, flash, redirect, url_for
 import os 
 import sys
 import json 
@@ -6,6 +6,8 @@ import faiss
 from PIL import Image
 import io 
 import base64
+import boto3
+import tempfile # Allow for index to be a tempfile when saved from cloud
 
 # DIRECTORIES 
 BASE_DIR = os.path.dirname(__file__) 
@@ -17,10 +19,34 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from search import convert_img_to_embedding, find_k_similar
 
 # Load index and json (should be existing already)
-with open(METADATA_FILE, "r") as f: 
-    metadata = json.load(f)
-metadata_hash = {album["faiss_index"]:album for album in metadata}
-faiss_index = faiss.read_index(INDEX_FILE)
+# CODE BELOW: Is for when metadata.json and faiss.index are in project directory
+# with open(METADATA_FILE, "r") as f: 
+#     metadata = json.load(f)
+# faiss_index = faiss.read_index(INDEX_FILE)
+
+
+# Load index and json from AWS S3 Cloud 
+# Assume AWS keys are loaded via dotenv
+s3 = boto3.client(
+    "s3",
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+    region_name=os.getenv("AWS_DEFAULT_REGION"),
+    config=boto3.session.Config(signature_version='s3v4'),
+)
+bucket = os.getenv("S3_BUCKET_NAME")
+
+index_obj = s3.get_object(Bucket=bucket, Key="faiss.index")
+index_bytes = index_obj['Body'].read()
+with tempfile.NamedTemporaryFile(suffix=".faiss") as f:
+    f.write(index_bytes)
+    f.flush()  # make sure contents are written
+    faiss_index = faiss.read_index(f.name)
+
+metadata_obj = s3.get_object(Bucket=bucket, Key="metadata.json")
+metadata = json.loads(metadata_obj['Body'].read().decode("utf-8"))
+metadata_hash = {album["faiss_index"]: album for album in metadata}
+
 
 app = Flask(__name__)
 
@@ -54,26 +80,13 @@ def results():
     emb = convert_img_to_embedding(img)
     final_list = find_k_similar(emb, faiss_index, metadata_hash, num_results)
 
+    # Add S3 URL for album images (REMOVE IF USING LOCAL FILES)
+    for album in final_list:
+        if "file_name" in album:
+            album["album_url"] = s3.generate_presigned_url(
+                ClientMethod='get_object',
+                Params={'Bucket': bucket, 'Key': album["file_name"]},
+                ExpiresIn=3600
+            )
+
     return render_template("results.html", img=img_data, results=final_list, num_results=num_results)
-
-
-@app.route('/cover/<int:idx>')
-def cover_image(idx: int):
-    """Serve an album cover image by faiss_index. Only files referenced in metadata.json
-    (under the project's albums folder) are served to avoid arbitrary file access.
-    """
-    album = metadata_hash.get(idx)
-    if not album:
-        abort(404)
-
-    file_path = album.get('file_name')
-    # Basic safety: only serve files from the albums directory
-    albums_dir = os.path.join(BASE_DIR, 'albums')
-    try:
-        # Ensure the requested file is inside the albums directory
-        abs_path = os.path.abspath(file_path)
-        if not abs_path.startswith(os.path.abspath(albums_dir) + os.sep):
-            abort(403)
-        return send_file(abs_path)
-    except FileNotFoundError:
-        abort(404)
