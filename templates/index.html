@@ -18,13 +18,13 @@
         <p class="subtitle">Does this picture look like it could've been in an album? Input an image and find out!</p>
     </header>
     <main class="container">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, msg in messages %}
-                            <div class="error-message" role="alert" style="color:#b91c1c;margin-bottom:12px;">{{ msg }}</div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div class="error-message" role="alert" style="color:#b91c1c;margin-bottom:12px;">{{ msg }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <form id="searchForm" method="post" action="/results" enctype="multipart/form-data">
         <label class="dropzone" id="dropZone" role="button" tabindex="0" aria-label="Upload image">
             <div id="dropText">Click to choose an image or drag &amp; drop</div>

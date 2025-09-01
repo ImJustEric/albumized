@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, flash, redirect, url_for
+from flask import Flask, request, render_template, flash, redirect, url_for, send_file, abort
 import os 
 import sys
 import json 
@@ -55,3 +55,25 @@ def results():
     final_list = find_k_similar(emb, faiss_index, metadata_hash, num_results)
 
     return render_template("results.html", img=img_data, results=final_list, num_results=num_results)
+
+
+@app.route('/cover/<int:idx>')
+def cover_image(idx: int):
+    """Serve an album cover image by faiss_index. Only files referenced in metadata.json
+    (under the project's albums folder) are served to avoid arbitrary file access.
+    """
+    album = metadata_hash.get(idx)
+    if not album:
+        abort(404)
+
+    file_path = album.get('file_name')
+    # Basic safety: only serve files from the albums directory
+    albums_dir = os.path.join(BASE_DIR, 'albums')
+    try:
+        # Ensure the requested file is inside the albums directory
+        abs_path = os.path.abspath(file_path)
+        if not abs_path.startswith(os.path.abspath(albums_dir) + os.sep):
+            abort(403)
+        return send_file(abs_path)
+    except FileNotFoundError:
+        abort(404)

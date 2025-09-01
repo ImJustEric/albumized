@@ -58,4 +58,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     });
 
-// pageshow handler removed per user request
+// To refresh all inputs when page is reloaded 
+window.addEventListener("pageshow", function() {
+    const input = document.getElementById("imageInput");
+    if (input) input.value = "";
+    document.getElementById("previewImg").style.display = "none";
+    document.getElementById("fileName").textContent = "No file chosen";
+  });

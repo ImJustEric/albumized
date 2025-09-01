@@ -34,8 +34,22 @@
       <div id="resultsGrid" class="results-grid">
         {% for item in results %}
           <div class="result-card" data-idx="{{ loop.index0 }}">
-            <div class="loading">Loading…</div>
+            {# Thumbnail served from /cover/<faiss_index> for safety #}
+            {% set idx = item.get('faiss_index') %}
+            <img class="album-thumb" src="{% if idx is not none %}{{ url_for('cover_image', idx=idx) }}{% else %}{{ url_for('static', filename='images/question-mark-circle-icon.svg') }}{% endif %}" alt="Album cover" />
+
+            <div class="meta">
+              <div class="title">{{ item.get('name', 'Unknown album') }}</div>
+              <div class="artist">{{ item.get('artist') | join(', ') if item.get('artist') else 'Unknown artist' }}</div>
+              <div class="links">
+                {% if item.get('spotify_url') %}
+                  <a href="{{ item.get('spotify_url') }}" target="_blank" rel="noopener noreferrer">Listen on Spotify</a>
+                {% endif %}
+              </div>
+            </div>
           </div>
+        {% else %}
+          <div class="no-result">No results found.</div>
         {% endfor %}
       </div>
     </section>
