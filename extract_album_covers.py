@@ -24,7 +24,9 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
     cache_path=".spotipyoauthcache"
 ))
 
-# Extract albums from artists 
+# Extract albums from artists (NOTE: This is one way to build data, another way
+# is use json as below)
+
 artists = [
     "3TVXtAsR1Inumwj472S9r4", # Drake
     "06HL4z0CvFAxyc27GXpf02", # Taylor Swift
@@ -89,6 +91,7 @@ if __name__ == "__main__":
     # Folder path directory 
     album_dir = os.path.join(BASE_DIR, 'albums')
     metadata_file = os.path.join(BASE_DIR, 'metadata.json')
+    json_file = os.path.join(BASE_DIR, 'artist_ids.json')
 
     # Check if album folder exists: 
     os.makedirs(album_dir, exist_ok=True)
@@ -101,6 +104,11 @@ if __name__ == "__main__":
     else: 
         metadata = []
         count = 1
+
+    # There is json list, then overwrite artist list 
+    if os.path.exists(json_file):
+        with open(json_file, "r") as f:
+            artists = json.load(f)
 
     for artist in artists: 
         albums = get_albums(artist)
