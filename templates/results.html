@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Results — Albumized</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <style>
+    .results-top { display:flex; justify-content:center; margin-bottom:18px; }
+    .input-preview { max-width: 100%; width: min(520px, 92%); height: auto; border-radius: 8px; box-shadow: 0 8px 30px rgba(12,20,30,0.06); }
+    .results-grid { display:flex; flex-direction:column; gap:14px; margin-top:18px; }
+    .result-card { background:#fff; border-radius:10px; padding:12px; min-height:120px; display:flex; gap:10px; align-items:center; justify-content:flex-start; box-shadow: 0 6px 18px rgba(12,20,30,0.04); width:100%; }
+    .result-card .loading { color:#6b7280; font-size:16px; margin:auto; }
+    .album-thumb { width:84px; height:84px; object-fit:cover; border-radius:6px; flex:0 0 84px; }
+    .meta { display:flex; flex-direction:column; gap:6px; }
+    .meta .title { font-weight:700; font-size:15px; color:#0b1220; }
+    .meta .artist { color:#6b7280; font-size:13px; }
+    .no-result { color:#9ca3af; font-size:14px; }
+    @media (max-width:600px){ .input-preview{ width:92%; } .result-card{ padding:10px; min-height:100px;} }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1 class="site-title">Results</h1>
+    <section class="results-top">
+      {% if img %}
+        <img id="inputImage" class="input-preview" src="{{ img }}" alt="Uploaded image" />
+      {% else %}
+        <div class="input-preview" style="display:flex;align-items:center;justify-content:center;padding:28px;">No image available</div>
+      {% endif %}
+    </section>
+
+    <section>
+      <div id="resultsGrid" class="results-grid">
+        {% for item in results %}
+          <div class="result-card" data-idx="{{ loop.index0 }}">
+            <div class="loading">Loading…</div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+</body>
+</html>

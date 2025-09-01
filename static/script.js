@@ -57,3 +57,5 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     });
+
+// pageshow handler removed per user request
