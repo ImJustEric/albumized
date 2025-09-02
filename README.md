@@ -24,7 +24,7 @@ source .venv/bin/activate
 2. Install dependencies (recommended in the venv)
 
 ```bash
-pip install flask pillow numpy
+pip install flask pillow numpy boto3 
 # Torch + torchvision: platform-specific — see https://pytorch.org for an appropriate command
 # FAISS: on many systems you can `pip install faiss-cpu`, but on macOS/Apple Silicon you may need conda:
 #   conda install -c conda-forge faiss-cpu
@@ -77,6 +77,14 @@ The repository includes a helper script `extract_album_covers.py` that is intend
 - Output: writes (or updates) `metadata.json` in the repo root which the Flask app and FAISS search use to map search results to album files and external URLs.
 
 Notes:
+- I have uploaded `metadata.json` and `faiss.index` to an S3 bucket. Note the object keys (paths) you used.
+- Provide AWS credentials in the environment (you can use the one for Spotify credentials if you have, or any dotenv):
+  - `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and optionally `AWS_SESSION_TOKEN`, or
+  - an IAM role assigned to the instance/container running the app.
+- Set the following environment variables before starting the app (example names used by the app):
+  - `S3_BUCKET` — the bucket name where the objects live
+  - `S3_METADATA_KEY` — key/path to your `metadata.json` (example: `metadata/metadata.json`)
+  - `S3_FAISS_KEY` — key/path to your `faiss.index` (example: `indexes/faiss.index`)
 - After updating `metadata.json` you will need a FAISS index that corresponds to the entries (the repo uses `faiss.index`). If you change the set of albums you may need to rebuild the FAISS index so `faiss_index` values match.
 - You can also edit `metadata.json` directly if you prefer to craft entries by hand; ensure `file_name` paths are correct and point to files under the `albums/` directory.
 
