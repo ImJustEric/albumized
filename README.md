@@ -11,7 +11,7 @@ This repo contains a small Flask app with an accessible upload UI, a results vie
 
 ## Current version 
 
-The current version of Albumized currently can quickly and efficiently search for similar album covers from over **700+** artists and **5500+** individual album covers.
+The current version of Albumized currently can quickly and efficiently search for similar album covers from over **700+** artists and **7000+** individual album covers.
 
 ## Quick start
 1. Create and activate a virtual environment
