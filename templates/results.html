@@ -34,7 +34,7 @@
         <div id="resultsGrid" class="results-grid">
         {% for item in results %}
             <div class="result-card" data-idx="{{ loop.index0 }}">
-            <img class="album-thumb" src="{{ item.get('album_url', url_for('static', filename='images/question-mark-circle-icon.svg')) }}" alt="Album cover" />
+            <img class="album-thumb" src="{{ item.album_url }}" alt="album image" loading="lazy">
             <div class="meta">
                 <div class="title">{{ item.get('name', 'Unknown album') }}</div>
                 <div class="artist">
