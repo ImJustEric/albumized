@@ -12,10 +12,20 @@ def convert_img_to_embedding(img):
     if not img: 
         print(f"Image does not exist at this path: {img}")
         return 
-    model = AlbumEmbeddingExtractor()
+    # Use a cached model instance to avoid loading the ResNet weights on every request
+    model = get_model()
     emb = model.embed_image(img)
     emb = np.expand_dims(emb, axis=0) # Turn into 2-D vector 
     return emb 
+
+
+# Singleton pattern to make sure only one Pytorch model is being loaded
+_GLOBAL_MODEL = None
+def get_model():
+    global _GLOBAL_MODEL
+    if _GLOBAL_MODEL is None:
+        _GLOBAL_MODEL = AlbumEmbeddingExtractor()
+    return _GLOBAL_MODEL
 
 
 def find_k_similar(img_emb, index, metadata, k) -> list[dict]:
