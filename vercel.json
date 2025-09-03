@@ -9,14 +9,14 @@
   "routes": [
     { "src": "/(.*)", "dest": "app.py" }
   ],
-  "env": {
-    "SPOTIPY_CLIENT_ID": "@SPOTIPY_CLIENT_ID",
-    "SPOTIPY_CLIENT_SECRET": "@SPOTIPY_CLIENT_SECRET",
-    "SPOTIPY_REDIRECT_URI": "@SPOTIPY_REDIRECT_URI",
-    "SECRET_KEY": "@SECRET_KEY",
-    "AWS_ACCESS_KEY_ID": "@AWS_ACCESS_KEY_ID",
-    "AWS_SECRET_ACCESS_KEY": "@AWS_SECRET_ACCESS_KEY",
-    "AWS_DEFAULT_REGION": "@AWS_DEFAULT_REGION",
-    "S3_BUCKET_NAME": "@S3_BUCKET_NAME"
-  }
+    "env": {
+    "SPOTIPY_CLIENT_ID": "temp",
+    "SPOTIPY_CLIENT_SECRET": "temp",
+    "SPOTIPY_REDIRECT_URI": "temp",
+    "SECRET_KEY": "temp",
+    "AWS_ACCESS_KEY_ID": "temp",
+    "AWS_SECRET_ACCESS_KEY": "temp",
+    "AWS_DEFAULT_REGION": "temp",
+    "S3_BUCKET_NAME": "temp"
+    }
 }
