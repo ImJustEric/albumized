@@ -8,6 +8,7 @@ import io
 import base64
 import boto3
 import tempfile # Allow for index to be a tempfile when saved from cloud
+import psutil
 
 # DIRECTORIES 
 BASE_DIR = os.path.dirname(__file__) 
@@ -17,6 +18,12 @@ INDEX_FILE = os.path.join(BASE_DIR, "faiss.index")
 # Allow for imports 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from search import convert_img_to_embedding, find_k_similar
+
+# Track memory usage from application 
+def log_mem(stage=""):
+    process = psutil.Process(os.getpid())
+    mem_mb = process.memory_info().rss / (1024 * 1024)
+    print(f"[MEMORY] {stage}: {mem_mb:.2f} MB")
 
 # Load index and json (should be existing already)
 # CODE BELOW: Is for when metadata.json and faiss.index are in project directory
@@ -56,11 +63,13 @@ app.secret_key = os.environ.get('SECRET_KEY')
 
 @app.route("/", methods=["GET"])
 def index():
+    log_mem("on open")
     return render_template("index.html")  # Just the form
 
 @app.route("/results", methods=["POST"])
 def results():
     file = request.files.get("image")
+    log_mem("after opening image")
     num_results = request.form.get("num_results", type=int)
     if not file:
         flash("Please input a valid image", "error")
@@ -71,14 +80,18 @@ def results():
         # Convert image to base64 string
         buf = io.BytesIO()
         img.save(buf, format="PNG")  # always save as PNG (or use img.format)
+        log_mem("after saving PNG")
         img_b64 = base64.b64encode(buf.getvalue()).decode("utf-8")
         img_data = f"data:image/png;base64,{img_b64}"
+        log_mem("after base64 encoding")
 
     except Exception as e:
         flash(f"Image cannot be converted: {e}", "error")
         return redirect(url_for('index'))
     emb = convert_img_to_embedding(img)
+    log_mem("after embedding")
     final_list = find_k_similar(emb, faiss_index, metadata_hash, num_results)
+    log_mem("after FAISS query")
 
     # Add S3 URL for album images (REMOVE IF USING LOCAL FILES)
     for album in final_list:
